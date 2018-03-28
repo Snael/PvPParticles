@@ -47,12 +47,12 @@ import work.siro.mod.pvpparticles.classes.SiroQModUtils;
 import work.siro.mod.pvpparticles.classes.TrailEffect;
 import work.siro.mod.pvpparticles.command.CommandPvPParticles;
 
-@Mod(modid = PvPParticles.MODID, version = PvPParticles.VERSION)
+@Mod(modid = PvPParticles.MODID, version = PvPParticles.VERSION,acceptedMinecraftVersions = "[1.8,1.8.9]")
 public class PvPParticles {
 
 	protected static Minecraft mc = Minecraft.getMinecraft();
 	public static final String MODID = "pvpparticles";
-	public static final String VERSION = "1.4.1";
+	public static final String VERSION = "1.5";
 	public static int attackEffect;
 	public static int killEffect;
 	public static int killBlockID;
@@ -309,5 +309,4 @@ public class PvPParticles {
 			}
 		}
 	}
-
 }
