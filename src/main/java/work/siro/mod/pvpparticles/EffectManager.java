@@ -80,9 +80,13 @@ public class EffectManager {
 
 	private static void playBlockBreak(Entity entity,int blockId) {
 		PvPParticles.mc.renderGlobal.playAuxSFX(null, 2001, new BlockPos(entity.posX,entity.posY+entity.getEyeHeight(),entity.posZ), blockId);
+		PvPParticles.mc.renderGlobal.playAuxSFX(null, 2001, new BlockPos(entity.posX,entity.posY+entity.getEyeHeight(),entity.posZ), blockId);
+		PvPParticles.mc.renderGlobal.playAuxSFX(null, 2001, new BlockPos(entity.posX,entity.posY+entity.getEyeHeight(),entity.posZ), blockId);
 	}
 
 	private static void playBlockBreak(double x , double y , double z ,double eyeHeight,int blockId) {
+		PvPParticles.mc.renderGlobal.playAuxSFX(null, 2001, new BlockPos(x,y+eyeHeight,z), blockId);
+		PvPParticles.mc.renderGlobal.playAuxSFX(null, 2001, new BlockPos(x,y+eyeHeight,z), blockId);
 		PvPParticles.mc.renderGlobal.playAuxSFX(null, 2001, new BlockPos(x,y+eyeHeight,z), blockId);
 	}
 

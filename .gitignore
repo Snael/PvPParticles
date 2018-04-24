@@ -2,6 +2,8 @@
 .project
 .gradle/*
 .settings/*
+.idea/*
+out/*
 build/*
 run/*
 bin/*

@@ -52,7 +52,7 @@ public class PvPParticles {
 
 	protected static Minecraft mc = Minecraft.getMinecraft();
 	public static final String MODID = "pvpparticles";
-	public static final String VERSION = "1.5.1";
+	public static final String VERSION = "1.6";
 	public static int attackEffect;
 	public static int killEffect;
 	public static int killBlockID;
@@ -282,31 +282,41 @@ public class PvPParticles {
 	@SubscribeEvent
 	public void onAttack(AttackEntityEvent event) {
 		lastAttackLocation = new Location(event.target.posX, event.target.posY, event.target.posZ, event.target.getEyeHeight());
-		new Timer().schedule(new TimerTask() {
-			@Override
-			public void run() {
-				lastAttackLocation = null;
-			}
-		}, 750);
+		new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        lastAttackLocation = null;
+                    }
+                }, 750);
+            }
+        }).start();
 		EffectManager.playAttackEffect(event.target);
 	}
 
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load event) {
-		watchingPlayer.clear();
-		if(!sentUpdateInfo) {
-			sentUpdateInfo = true;
-			SiroQModUtils.noticeInfo(MODID);
-			if(SiroQModUtils.hasUpdate(MODID, VERSION)){
-				new Timer().schedule(new TimerTask() {
-					@Override
-					public void run() {
-						if(mc.thePlayer != null) {
-							mc.thePlayer.addChatMessage(new ChatComponentText("§e[§cPvPParticles§e] §aPvP Particle has new version!"));
-						}
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				watchingPlayer.clear();
+				if(!sentUpdateInfo) {
+					sentUpdateInfo = true;
+					SiroQModUtils.noticeInfo(MODID);
+					if(SiroQModUtils.hasUpdate(MODID, VERSION)){
+						new Timer().schedule(new TimerTask() {
+							@Override
+							public void run() {
+								if(mc.thePlayer != null) {
+									mc.thePlayer.addChatMessage(new ChatComponentText("§e[§cPvPParticles§e] §aPvP Particle has new version!"));
+								}
+							}
+						}, 5000);
 					}
-				}, 5000);
+				}
 			}
-		}
+		}).start();
 	}
 }
