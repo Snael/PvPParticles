@@ -38,6 +38,8 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import work.siro.mod.pvpparticles.classes.AttackEffect;
 import work.siro.mod.pvpparticles.classes.KillEffect;
 import work.siro.mod.pvpparticles.classes.Location;
@@ -46,13 +48,13 @@ import work.siro.mod.pvpparticles.classes.SiroQModDebugger;
 import work.siro.mod.pvpparticles.classes.SiroQModUtils;
 import work.siro.mod.pvpparticles.classes.TrailEffect;
 import work.siro.mod.pvpparticles.command.CommandPvPParticles;
-
+@SideOnly(Side.CLIENT)
 @Mod(modid = PvPParticles.MODID, version = PvPParticles.VERSION,acceptedMinecraftVersions = "[1.8.8,1.8.9]")
 public class PvPParticles {
 
 	protected static Minecraft mc = Minecraft.getMinecraft();
 	public static final String MODID = "pvpparticles";
-	public static final String VERSION = "1.6";
+	public static final String VERSION = "1.7";
 	public static int attackEffect;
 	public static int killEffect;
 	public static int killBlockID;
@@ -93,9 +95,6 @@ public class PvPParticles {
 		try {
 			properties.load(new FileInputStream(propertiesFile));
 			killEffect = Integer.valueOf(properties.getProperty("killeffect","0"));
-			if(killEffect > 1) {
-				killEffect = 0;
-			}
 			try {
 				killBlockID = Integer.valueOf(properties.getProperty("killblock","0"));
 			} catch(NumberFormatException e) {
@@ -132,7 +131,7 @@ public class PvPParticles {
 					String player = message.replace(killMessage.replace("PLAYER", mc.thePlayer.getName()), "").replace(" ", "");
 					if(watchingPlayer.containsKey(player)) {
 						Location loc = watchingPlayer.get(player);
-						EffectManager.playKillEffect(loc.x, loc.y, loc.z, loc.eyeHeight);
+						EffectManager.playKillEffect(loc.world,loc.x, loc.y, loc.z, loc.eyeHeight);
 						watchingPlayer.remove(player);
 						return;
 					}
@@ -144,7 +143,7 @@ public class PvPParticles {
 						String player = message.replace(killMessage.replace("PLAYER", mc.thePlayer.getName()), "").replace(" ", "");
 						if(watchingPlayer.containsKey(player)) {
 							Location loc = watchingPlayer.get(player);
-							EffectManager.playKillEffect(loc.x, loc.y, loc.z, loc.eyeHeight);
+							EffectManager.playKillEffect(loc.world,loc.x, loc.y, loc.z, loc.eyeHeight);
 							watchingPlayer.remove(player);
 							return;
 						}
@@ -152,24 +151,37 @@ public class PvPParticles {
 						String player = message.replace(killMessage.replace("PLAYER", mc.thePlayer.getName()), "").replace("FINAL KILL!", "").replace(" ", "");
 						if(watchingPlayer.containsKey(player)) {
 							Location loc = watchingPlayer.get(player);
-							EffectManager.playKillEffect(loc.x, loc.y, loc.z, loc.eyeHeight);
+							EffectManager.playKillEffect(loc.world,loc.x, loc.y, loc.z, loc.eyeHeight);
 							watchingPlayer.remove(player);
 							return;
 						}
 					}
 				}
 			}
+			if(message.contains("You killed ")) {
+			    if(lastAttackLocation != null) {
+			        EffectManager.playKillEffect(lastAttackLocation.world,lastAttackLocation.x, lastAttackLocation.y, lastAttackLocation.z, lastAttackLocation.eyeHeight);
+			        return;
+			    }
+			}
 			if(message.contains("coins! Kill")) {
 				if(lastAttackLocation != null) {
-					EffectManager.playKillEffect(lastAttackLocation.x, lastAttackLocation.y, lastAttackLocation.z, lastAttackLocation.eyeHeight);
+					EffectManager.playKillEffect(lastAttackLocation.world,lastAttackLocation.x, lastAttackLocation.y, lastAttackLocation.z, lastAttackLocation.eyeHeight);
+					return;
 				}
 			}
+            if(message.contains("was discovered by [Seeker] "+mc.thePlayer.getName()+"!")){
+                if(lastAttackLocation != null) {
+                    EffectManager.playKillEffect(lastAttackLocation.world,lastAttackLocation.x, lastAttackLocation.y, lastAttackLocation.z, lastAttackLocation.eyeHeight);
+                    return;
+                }
+            }
 			if(event.type == 2) {
 				if(message.contains("KILL!")) {
 					String player = message.replaceAll(" KILL!", "");
 					if(watchingPlayer.containsKey(player)) {
 						Location loc = watchingPlayer.get(player);
-						EffectManager.playKillEffect(loc.x, loc.y, loc.z, loc.eyeHeight);
+						EffectManager.playKillEffect(loc.world,loc.x, loc.y, loc.z, loc.eyeHeight);
 						watchingPlayer.remove(player);
 						return;
 					}
@@ -182,7 +194,7 @@ public class PvPParticles {
 					String player = message.replace(killMessage.replace("PLAYER", nickName), "").replace(" ", "");
 					if(watchingPlayer.containsKey(player)) {
 						Location loc = watchingPlayer.get(player);
-						EffectManager.playKillEffect(loc.x, loc.y, loc.z, loc.eyeHeight);
+						EffectManager.playKillEffect(loc.world,loc.x, loc.y, loc.z, loc.eyeHeight);
 						watchingPlayer.remove(player);
 						return;
 					}
@@ -194,7 +206,7 @@ public class PvPParticles {
 						String player = message.replace(killMessage.replace("PLAYER", nickName), "").replace(" ", "");
 						if(watchingPlayer.containsKey(player)) {
 							Location loc = watchingPlayer.get(player);
-							EffectManager.playKillEffect(loc.x, loc.y, loc.z, loc.eyeHeight);
+							EffectManager.playKillEffect(loc.world,loc.x, loc.y, loc.z, loc.eyeHeight);
 							watchingPlayer.remove(player);
 							return;
 						}
@@ -202,24 +214,37 @@ public class PvPParticles {
 						String player = message.replace(killMessage.replace("PLAYER", nickName), "").replace("FINAL KILL!", "").replace(" ", "");
 						if(watchingPlayer.containsKey(player)) {
 							Location loc = watchingPlayer.get(player);
-							EffectManager.playKillEffect(loc.x, loc.y, loc.z, loc.eyeHeight);
+							EffectManager.playKillEffect(loc.world,loc.x, loc.y, loc.z, loc.eyeHeight);
 							watchingPlayer.remove(player);
 							return;
 						}
 					}
 				}
 			}
+            if(message.contains("You killed ")) {
+                if(lastAttackLocation != null) {
+                    EffectManager.playKillEffect(lastAttackLocation.world,lastAttackLocation.x, lastAttackLocation.y, lastAttackLocation.z, lastAttackLocation.eyeHeight);
+                    return;
+                }
+            }
 			if(message.contains("coins! Kill")) {
 				if(lastAttackLocation != null) {
-					EffectManager.playKillEffect(lastAttackLocation.x, lastAttackLocation.y, lastAttackLocation.z, lastAttackLocation.eyeHeight);
+					EffectManager.playKillEffect(lastAttackLocation.world,lastAttackLocation.x, lastAttackLocation.y, lastAttackLocation.z, lastAttackLocation.eyeHeight);
+					return;
 				}
 			}
+			if(message.contains("was discovered by [Seeker] "+nickName+"!")){
+                if(lastAttackLocation != null) {
+                    EffectManager.playKillEffect(lastAttackLocation.world,lastAttackLocation.x, lastAttackLocation.y, lastAttackLocation.z, lastAttackLocation.eyeHeight);
+                    return;
+                }
+            }
 			if(event.type == 2) {
 				if(message.contains("KILL!")) {
 					String player = message.replaceAll(" KILL!", "");
 					if(watchingPlayer.containsKey(player)) {
 						Location loc = watchingPlayer.get(player);
-						EffectManager.playKillEffect(loc.x, loc.y, loc.z, loc.eyeHeight);
+						EffectManager.playKillEffect(loc.world,loc.x, loc.y, loc.z, loc.eyeHeight);
 						watchingPlayer.remove(player);
 						return;
 					}
@@ -231,7 +256,7 @@ public class PvPParticles {
 	@SubscribeEvent
 	public void onRenderPlayer(RenderPlayerEvent.Post event) {
 		watchingPlayer.remove(event.entityPlayer.getName());
-		watchingPlayer.put(event.entityPlayer.getName(), new Location(event.entityPlayer.posX,event.entityPlayer.posY,event.entityPlayer.posZ,event.entityPlayer.getEyeHeight()));
+		watchingPlayer.put(event.entityPlayer.getName(), new Location(event.entityPlayer.getEntityWorld(),event.entityPlayer.posX,event.entityPlayer.posY,event.entityPlayer.posZ,event.entityPlayer.getEyeHeight()));
 	}
 
 	@SubscribeEvent
@@ -281,18 +306,7 @@ public class PvPParticles {
 
 	@SubscribeEvent
 	public void onAttack(AttackEntityEvent event) {
-		lastAttackLocation = new Location(event.target.posX, event.target.posY, event.target.posZ, event.target.getEyeHeight());
-		new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        lastAttackLocation = null;
-                    }
-                }, 750);
-            }
-        }).start();
+		lastAttackLocation = new Location(event.target.getEntityWorld(),event.target.posX, event.target.posY, event.target.posZ, event.target.getEyeHeight());
 		EffectManager.playAttackEffect(event.target);
 	}
 

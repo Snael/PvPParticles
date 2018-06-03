@@ -6,10 +6,10 @@
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "https://siro.work/mods/pvpparticles",
-  "updateUrl": "",
+  "updateUrl": "https://siro.work/mods/pvpparticles",
   "authorList": ["SiroQ"],
   "credits": "SiroQ",
-  "logoFile": "",
+  "logoFile": "Logo.jpg",
   "screenshots": [],
   "dependencies": []
 }

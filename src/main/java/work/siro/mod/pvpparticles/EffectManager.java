@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ReportedException;
+import net.minecraft.world.World;
 import work.siro.mod.pvpparticles.classes.AttackEffect;
 import work.siro.mod.pvpparticles.classes.KillEffect;
 import work.siro.mod.pvpparticles.classes.TrailEffect;
@@ -19,16 +20,22 @@ public class EffectManager {
 			case KillEffect.BLOCKBREAK:
 				playBlockBreak(entity,PvPParticles.killBlockID);
 				break;
+            case KillEffect.SOULBROKE:
+                playSoulBroke(entity);
+                break;
 		}
 	}
 
-	public static void playKillEffect(double x,double y,double z,double eyeHeight) {
+	public static void playKillEffect(World world,double x, double y, double z, double eyeHeight) {
 		switch(PvPParticles.killEffect) {
 			case KillEffect.NONE:
 				break;
 			case KillEffect.BLOCKBREAK:
 				playBlockBreak(x,y,z,eyeHeight,PvPParticles.killBlockID);
 				break;
+            case KillEffect.SOULBROKE:
+                playSoulBroke(world, x, y, z,eyeHeight);
+                break;
 		}
 	}
 
@@ -89,6 +96,18 @@ public class EffectManager {
 		PvPParticles.mc.renderGlobal.playAuxSFX(null, 2001, new BlockPos(x,y+eyeHeight,z), blockId);
 		PvPParticles.mc.renderGlobal.playAuxSFX(null, 2001, new BlockPos(x,y+eyeHeight,z), blockId);
 	}
+
+	private static void playSoulBroke(Entity entity){
+        entity.worldObj.playAuxSFX(2003, new BlockPos(entity.posX,entity.posY+entity.getEyeHeight(),entity.posZ), 0);
+        entity.worldObj.playAuxSFX(2003, new BlockPos(entity.posX,entity.posY+entity.getEyeHeight(),entity.posZ), 0);
+        entity.worldObj.playAuxSFX(2003, new BlockPos(entity.posX,entity.posY+entity.getEyeHeight(),entity.posZ), 0);
+    }
+
+    private static void playSoulBroke(World world, double x , double y , double z, double eyeHeight) {
+        world.playAuxSFX(2003, new BlockPos(x,y+eyeHeight,z), 0);
+        world.playAuxSFX(2003, new BlockPos(x,y+eyeHeight,z), 0);
+        world.playAuxSFX(2003, new BlockPos(x,y+eyeHeight,z), 0);
+    }
 
 	private static void spawnParticle(Entity entity,EnumParticleTypes particleType) {
 		entity.getEntityWorld().spawnParticle(particleType, entity.posX, entity.posY, entity.posZ, 0, 0, 0, new int[0]);

@@ -49,6 +49,9 @@ public class GuiPvPParticlesSetting extends GuiScreen {
 				buttonKillParticle.displayString = "Kill: §fBlock Break";
 				blockIdField.setVisible(true);
 				break;
+			case KillEffect.SOULBROKE:
+				buttonKillParticle.displayString = "Kill: §5Soul Broke";
+				break;
 		}
 		buttonAttackParticle = new GuiButton(1, this.width / 2 - 75, this.height / 2 - 22, 150 , 20,"");
 		switch(PvPParticles.attackEffect) {
@@ -198,7 +201,7 @@ public class GuiPvPParticlesSetting extends GuiScreen {
 			}
 		}
 		this.fontRendererObj.drawString("PvP Particle "+PvPParticles.VERSION+" by @SiroQ_", this.width/2-mc.fontRendererObj.getStringWidth("PvP Particle "+PvPParticles.VERSION+" by @SiroQ_")/2, this.height/2-77, 16777215);
-		this.fontRendererObj.drawString("Contributors: @SimplyRin_, @Rom_0017", this.width/2-mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_, @Rom_0017")/2, this.height/2-66, 16777215);
+		this.fontRendererObj.drawString("Contributors: @SimplyRin_, @DevR0m", this.width/2-mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_, @DevR0m")/2, this.height/2-66, 16777215);
 		this.fontRendererObj.drawString("Setting: https://siro.work/mods/pvpparticles/", this.width/2-mc.fontRendererObj.getStringWidth("Setting: https://siro.work/mods/pvpparticles/")/2, this.height/2-55, 16777215);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
@@ -235,8 +238,12 @@ public class GuiPvPParticlesSetting extends GuiScreen {
 					PvPParticles.killEffect = KillEffect.BLOCKBREAK;
 					break;
 				case KillEffect.BLOCKBREAK:
-					buttonKillParticle.displayString = "Kill: §7None";
+					buttonKillParticle.displayString = "Kill: §5Soul Broke";
 					blockIdField.setVisible(false);
+					PvPParticles.killEffect = KillEffect.SOULBROKE;
+					break;
+				case KillEffect.SOULBROKE:
+					buttonKillParticle.displayString = "Kill: §7None";
 					PvPParticles.killEffect = KillEffect.NONE;
 					break;
 			}
@@ -322,19 +329,19 @@ public class GuiPvPParticlesSetting extends GuiScreen {
 				} catch (URISyntaxException e) {e.printStackTrace();}
 			}
 		}else if(mouseY >= this.height/2-66 && mouseY <= this.height/2-56) {
-			if(mouseX >= this.width/2-mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_, @Rom_0017")/2+mc.fontRendererObj.getStringWidth("Contributors: ") && mouseX <= this.width/2-mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_, @Rom_0017")/2 + mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_")){
+			if(mouseX >= this.width/2-mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_, @DevR0m")/2+mc.fontRendererObj.getStringWidth("Contributors: ") && mouseX <= this.width/2-mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_, @DevR0m")/2 + mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_")){
 				try {
-					Desktop.getDesktop().browse(new URI("https://twitter.com/SimplyRin_"));
+					Desktop.getDesktop().browse(new URI("https://twitter.com/intent/user?user_id=4382642779"));
 				} catch (URISyntaxException e) {e.printStackTrace();}
-			}else if(mouseX >= this.width/2-mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_, @Rom_0017")/2+mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_, ") && mouseX <= this.width/2-mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_, @Rom_0017")/2 + mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_, @Rom_0017")) {
+			}else if(mouseX >= this.width/2-mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_, @DevR0m")/2+mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_, ") && mouseX <= this.width/2-mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_, @DevR0m")/2 + mc.fontRendererObj.getStringWidth("Contributors: @SimplyRin_, @DevR0m")) {
 				try {
-					Desktop.getDesktop().browse(new URI("https://twitter.com/Rom_0017"));
+					Desktop.getDesktop().browse(new URI("https://twitter.com/intent/user?user_id=787257835352576001"));
 				} catch (URISyntaxException e) {e.printStackTrace();}
 			}
 		}else if(mouseY >= this.height/2-77 && mouseY <= this.height/2-67) {
 			if(mouseX >= this.width/2-mc.fontRendererObj.getStringWidth("PvP Particle "+PvPParticles.VERSION+" by @SiroQ_")/2+mc.fontRendererObj.getStringWidth("PvP Particle "+PvPParticles.VERSION+" by ") && mouseX <= this.width/2-mc.fontRendererObj.getStringWidth("PvP Particle "+PvPParticles.VERSION+" by @SiroQ_")/2 + mc.fontRendererObj.getStringWidth("PvP Particle "+PvPParticles.VERSION+" by @SiroQ_")){
 				try {
-					Desktop.getDesktop().browse(new URI("https://twitter.com/SiroQ_"));
+					Desktop.getDesktop().browse(new URI("https://twitter.com/intent/user?user_id=862265491485638656"));
 				} catch (URISyntaxException e) {e.printStackTrace();}
 			}
 		}
